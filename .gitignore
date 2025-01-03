@@ -1,21 +1,88 @@
-# Ignore node_modules directory
+# Dependencies
 node_modules/
+/.pnp
+.pnp.js
+yarn.lock
+package-lock.json
 
-# Ignore log files
-*.log
+# Testing
+/coverage
+*.test.js
+__tests__/
+jest.config.js
 
-# Ignore build directories
+# Production & Build files
 dist/
 build/
+.next/
+out/
+*.tsbuildinfo
 
-# Ignore environment variable files
+# Environment variables
 .env
 .env.local
+.env.development
+.env.test
+.env.production
+.env*.local
 
-# Ignore OS generated files
+# Debug logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
-# Ignore IDE specific files
-.vscode/
+# IDE specific files
 .idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*.bak
+*.sublime-workspace
+*.sublime-project
+
+# Cache directories
+.cache/
+.npm
+.eslintcache
+.stylelintcache
+
+# Temporary files
+*.tmp
+*.temp
+.temp/
+tmp/
+
+# Local Netlify folder
+.netlify
+
+# Vercel
+.vercel
+
+# PWA files
+public/sw.js
+public/workbox-*.js
+public/worker-*.js
+public/sw.js.map
+public/workbox-*.js.map
+public/worker-*.js.map
+
+# Database files
+*.sqlite
+*.db
+
+# Misc
+.husky/
+.github/

@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { createClient } from '@supabase/supabase-js';
 
 interface TigrayTutorInput {
-  lessonUpload: File;
+  lessonUpload?: File;
   userMessage: string;
   voiceInput: string;
-  actionType: 'translate' | 'tutor';
+  actionType: 'translate' | 'tutor' | 'analyze_pdf';
 }
 
 interface TigrayTutorOutput {
@@ -22,6 +23,11 @@ interface TigrayTutorOutput {
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 async function handleTigrayTutorAction(data: TigrayTutorInput): Promise<TigrayTutorOutput> {
   try {
@@ -51,6 +57,10 @@ async function handleTigrayTutorAction(data: TigrayTutorInput): Promise<TigrayTu
     console.error("Error in handleTigrayTutorAction:", error);
     throw error;
   }
+}
+
+async function handlePDFUpload(file: File) {
+  // Implement PDF processing logic
 }
 
 export async function POST(req: Request) {

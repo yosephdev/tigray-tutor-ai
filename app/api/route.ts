@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { createClient } from '@supabase/supabase-js';
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
 interface TigrayTutorInput {
   lessonUpload?: File;
@@ -29,18 +31,23 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+// Create rate limiter
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(5, "1 m"), // 5 requests per minute
+});
+
 async function handleTigrayTutorAction(data: TigrayTutorInput): Promise<TigrayTutorOutput> {
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
+      model: "gpt-3.5-turbo",
       messages: [{
-        role: "user" as const,
+        role: "user",
         content: data.actionType === 'translate' 
           ? `Translate this text: "${data.userMessage}" to Tigrinya.` 
           : `Provide tutoring assistance on the following message: "${data.userMessage}".`
       }],
-      tools: [],
-      tool_choice: "auto",
+      temperature: 0.7,
     });
 
     const responseContent = response.choices[0].message.content ?? "";
@@ -65,13 +72,44 @@ async function handlePDFUpload(file: File) {
 
 export async function POST(req: Request) {
   try {
-    const data: TigrayTutorInput = await req.json();
-    const tutorResult = await handleTigrayTutorAction(data);
-    return NextResponse.json(tutorResult, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({
-      error: "Failed to process the request.",
-      details: error instanceof Error ? error.message : String(error),
-    }, { status: 500 });
+    // Check rate limit
+    const ip = req.headers.get("x-forwarded-for") ?? "127.0.0.1";
+    const { success, limit, reset, remaining } = await ratelimit.limit(ip);
+
+    if (!success) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429 }
+      );
+    }
+
+    const data = await req.json();
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{
+        role: "user",
+        content: data.actionType === 'translate' 
+          ? `Translate this text: "${data.userMessage}" to Tigrinya.` 
+          : `Provide tutoring assistance on the following message: "${data.userMessage}".`
+      }],
+      temperature: 0.7,
+    });
+
+    return NextResponse.json(response.choices[0].message);
+
+  } catch (error: any) {
+    if (error?.response?.status === 429) {
+      return NextResponse.json(
+        { error: "OpenAI API quota exceeded. Please try again later." },
+        { status: 429 }
+      );
+    }
+
+    console.error("API Error:", error);
+    return NextResponse.json(
+      { error: "An error occurred while processing your request." },
+      { status: 500 }
+    );
   }
 }

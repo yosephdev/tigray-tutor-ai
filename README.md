@@ -38,7 +38,7 @@ TigrayTutor is an AI-powered educational platform designed specifically for Tigr
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/tigraytutor.git
+git clone https://github.com/yosephdev/tigray-tutor-ai.git
 
 cd tigraytutor
 ```

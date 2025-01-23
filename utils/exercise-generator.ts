@@ -1,8 +1,7 @@
-import OpenAI from "openai";
+import axios from 'axios';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions'; // Replace with actual DeepSeek API URL
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 
 export async function generateExercises(content: string, difficulty: string) {
     const prompt = `Create 5 multiple choice questions about: ${content}
@@ -13,11 +12,26 @@ export async function generateExercises(content: string, difficulty: string) {
       - explanation
       Difficulty level: ${difficulty}`;
   
-    const response = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
-      messages: [{ role: "user", content: prompt }],
-      response_format: { type: "json_object" }
-    });
-  
-    return JSON.parse(response.choices[0].message.content || '[]');
-  }
+    try {
+        const response = await axios.post(
+            DEEPSEEK_API_URL,
+            {
+                model: 'deepseek-chat', // Replace with the appropriate model
+                messages: [{ role: "user", content: prompt }],
+                response_format: { type: "json_object" }
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+
+        const data = response.data as { choices: { message: { content: string } }[] };
+        return JSON.parse(data.choices[0].message.content || '[]');
+    } catch (error) {
+        console.error("Error generating exercises:", error);
+        throw error;
+    }
+}

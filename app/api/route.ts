@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
 import { createClient } from '@supabase/supabase-js';
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import OpenAI from "openai";
 
 interface TigrayTutorInput {
   lessonUpload?: File;
@@ -22,10 +22,6 @@ interface TigrayTutorOutput {
   };
 }
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -37,20 +33,60 @@ const ratelimit = new Ratelimit({
   limiter: Ratelimit.slidingWindow(5, "1 m"), // 5 requests per minute
 });
 
+// Initialize OpenAI client with Deepseek configuration
+const openai = new OpenAI({
+  baseURL: 'https://api.deepseek.com',
+  apiKey: process.env.DEEPSEEK_API_KEY
+});
+
+async function handlePDFUpload(file: File): Promise<string> {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    
+    // Initialize PDF.js
+    const pdfjsLib = await import('pdfjs-dist');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+    
+    // Load the PDF document
+    const doc = await pdfjsLib.getDocument(arrayBuffer).promise;
+    let fullText = '';
+    
+    // Extract text from all pages
+    for (let i = 1; i <= doc.numPages; i++) {
+      const page = await doc.getPage(i);
+      const content = await page.getTextContent();
+      const text = content.items.map((item: any) => item.str).join(' ');
+      fullText += text + '\n';
+    }
+    
+    return fullText.trim();
+  } catch (error) {
+    console.error('Error processing PDF:', error);
+    throw new Error('Failed to process PDF file');
+  }
+}
+
 async function handleTigrayTutorAction(data: TigrayTutorInput): Promise<TigrayTutorOutput> {
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+    let content = data.userMessage;
+    
+    if (data.actionType === 'analyze_pdf' && data.lessonUpload) {
+      const pdfText = await handlePDFUpload(data.lessonUpload);
+      content = `Analyze this lesson content: "${pdfText}"`;
+    }
+    
+    const completion = await openai.chat.completions.create({
+      model: 'deepseek-chat',
       messages: [{
         role: "user",
         content: data.actionType === 'translate' 
-          ? `Translate this text: "${data.userMessage}" to Tigrinya.` 
-          : `Provide tutoring assistance on the following message: "${data.userMessage}".`
+          ? `Translate this text: "${content}" to Tigrinya.`
+          : `Provide tutoring assistance on the following message: "${content}".`
       }],
       temperature: 0.7,
     });
 
-    const responseContent = response.choices[0].message.content ?? "";
+    const responseContent = completion.choices[0].message.content ?? "";
     const exercises: string[] = [];
     const translation = data.actionType === 'translate' ? responseContent : "";
     
@@ -66,15 +102,10 @@ async function handleTigrayTutorAction(data: TigrayTutorInput): Promise<TigrayTu
   }
 }
 
-async function handlePDFUpload(file: File) {
-  // Implement PDF processing logic
-}
-
 export async function POST(req: Request) {
   try {
-    // Check rate limit
     const ip = req.headers.get("x-forwarded-for") ?? "127.0.0.1";
-    const { success, limit, reset, remaining } = await ratelimit.limit(ip);
+    const { success } = await ratelimit.limit(ip);
 
     if (!success) {
       return NextResponse.json(
@@ -84,24 +115,13 @@ export async function POST(req: Request) {
     }
 
     const data = await req.json();
-
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{
-        role: "user",
-        content: data.actionType === 'translate' 
-          ? `Translate this text: "${data.userMessage}" to Tigrinya.` 
-          : `Provide tutoring assistance on the following message: "${data.userMessage}".`
-      }],
-      temperature: 0.7,
-    });
-
-    return NextResponse.json(response.choices[0].message);
+    const result = await handleTigrayTutorAction(data);
+    return NextResponse.json(result);
 
   } catch (error: any) {
-    if (error?.response?.status === 429) {
+    if (error?.status === 429) {
       return NextResponse.json(
-        { error: "OpenAI API quota exceeded. Please try again later." },
+        { error: "DeepSeek API quota exceeded. Please try again later." },
         { status: 429 }
       );
     }

@@ -60,14 +60,14 @@ const TigrayTutor: React.FC = () => {
         body: JSON.stringify(input),
       });
 
-      const data: TigrayTutorOutput = await response.json();
       if (!response.ok) {
         throw new Error('Error fetching data');
       }
 
+      const data: TigrayTutorOutput = await response.json();
       setOutput(data);
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || 'An error occurred while processing your request.');
     } finally {
       setLoading(false);
     }
@@ -85,7 +85,12 @@ const TigrayTutor: React.FC = () => {
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <Label htmlFor="userMessage">Your Message</Label>
-                <Textarea name="userMessage" value={input.userMessage} onChange={handleInputChange} />
+                <Textarea 
+                  name="userMessage" 
+                  value={input.userMessage} 
+                  onChange={handleInputChange} 
+                  placeholder="Enter your question or text here..."
+                />
               </div>
               <div className="mb-4 relative">
                 <Label htmlFor="voiceInput">Voice Input</Label>
@@ -110,7 +115,12 @@ const TigrayTutor: React.FC = () => {
               </div>
               <div className="mb-4">
                 <Label htmlFor="lessonUpload">Lesson Upload</Label>
-                <Input type="file" name="lessonUpload" onChange={handleFileChange} />
+                <Input 
+                  type="file" 
+                  name="lessonUpload" 
+                  onChange={handleFileChange} 
+                  accept=".pdf"
+                />
               </div>
               <div className="mb-4">
                 <Label htmlFor="actionType">Action Type</Label>
@@ -126,22 +136,32 @@ const TigrayTutor: React.FC = () => {
                   <option value="translate">Translate</option>
                 </select>
               </div>
-              <Button type="submit" disabled={loading}>Submit</Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? 'Processing...' : 'Submit'}
+              </Button>
             </form>
-            {loading && <p>Loading...</p>}
-            {error && <p className="text-red-500">{error}</p>}
+            {loading && <p className="mt-4 text-gray-600">Loading...</p>}
+            {error && <p className="mt-4 text-red-500">{error}</p>}
             {output && (
               <div className="mt-4">
                 <h3 className="text-lg font-semibold">Response:</h3>
                 <p>{output.response}</p>
-                <h3 className="text-lg font-semibold">Translation:</h3>
-                <p>{output.translation}</p>
-                <h3 className="text-lg font-semibold">Exercises:</h3>
-                <ul>
-                  {output.exercises.map((exercise, index) => (
-                    <li key={index}>{exercise}</li>
-                  ))}
-                </ul>
+                {output.translation && (
+                  <>
+                    <h3 className="text-lg font-semibold mt-4">Translation:</h3>
+                    <p>{output.translation}</p>
+                  </>
+                )}
+                {output.exercises && output.exercises.length > 0 && (
+                  <>
+                    <h3 className="text-lg font-semibold mt-4">Exercises:</h3>
+                    <ul className="list-disc pl-5">
+                      {output.exercises.map((exercise, index) => (
+                        <li key={index}>{exercise}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
               </div>
             )}
           </CardContent>

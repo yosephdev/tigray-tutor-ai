@@ -19,55 +19,10 @@ TigrayTutor is an AI-powered educational platform designed specifically for Tigr
 
 - ⚡ Built with Next.js 14
 - 🔐 Supabase authentication & database
-- 🧠 OpenAI integration
+- 🧠 DeepSeekAI integration
 - 📱 Responsive design
 - 🌐 Low-bandwidth optimized
 - 🌙 Dark/light mode support
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 18.x or higher
-- npm or yarn
-- Supabase account
-- OpenAI API key
-
-### Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/yosephdev/tigray-tutor-ai.git
-
-cd tigraytutor
-```
-
-2. Install dependencies:
-
-```bash
-npm install
-```
-
-3. Set up environment variables:
-
-```bash
-cp .env.example .env.local
-```
-
-4. Fill in your environment variables:
-
-```bash
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
-OPENAI_API_KEY=your_openai_key
-```
-
-5. Run the development server:
-
-```bash
-npm run dev
-```
 
 ## 🎯 Target Users
 

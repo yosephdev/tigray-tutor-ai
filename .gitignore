@@ -86,3 +86,7 @@ public/worker-*.js.map
 # Misc
 .husky/
 .github/
+
+.env.local
+
+firestore.rules

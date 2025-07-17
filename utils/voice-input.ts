@@ -3,51 +3,77 @@ declare global {
     webkitSpeechRecognition: any;
     SpeechRecognition: any;
   }
-  type SpeechRecognitionEvent = {
-    results: {
-      [key: number]: {
-        [key: number]: {
-          transcript: string;
-        };
-      };
-    };
-  };
-  type SpeechRecognitionErrorEvent = {
-    error: string;
-    message?: string;
-  };
 }
 
 export class VoiceInput {
-    private recognition: any;
-    
-    constructor() {
-      if ('webkitSpeechRecognition' in window) {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  private recognition: any;
+  private isListening: boolean = false;
+  
+  constructor() {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      
+      if (SpeechRecognition) {
         this.recognition = new SpeechRecognition();
         this.recognition.continuous = false;
-        this.recognition.lang = 'ti-ET'; // Tigrinya
+        this.recognition.interimResults = false;
+        this.recognition.lang = 'ti-ET'; // Tigrinya (Ethiopia)
       } else {
-        throw new Error('Speech recognition not supported');
+        console.warn('Speech recognition not supported in this browser');
       }
     }
-  
-    startListening(): Promise<string> {
-      return new Promise((resolve, reject) => {
-        this.recognition.onresult = (event: SpeechRecognitionEvent) => {
-          const transcript = event.results[0][0].transcript;
-          resolve(transcript);
-        };
-        
-        this.recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
-          reject(new Error('Speech recognition error'));
-        };
-        
+  }
+
+  isSupported(): boolean {
+    return !!this.recognition;
+  }
+
+  startListening(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (!this.recognition) {
+        reject(new Error('Speech recognition not supported'));
+        return;
+      }
+
+      if (this.isListening) {
+        reject(new Error('Already listening'));
+        return;
+      }
+
+      this.isListening = true;
+
+      this.recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        this.isListening = false;
+        resolve(transcript);
+      };
+      
+      this.recognition.onerror = (event: any) => {
+        this.isListening = false;
+        reject(new Error(`Speech recognition error: ${event.error}`));
+      };
+
+      this.recognition.onend = () => {
+        this.isListening = false;
+      };
+      
+      try {
         this.recognition.start();
-      });
-    }
-  
-    stop() {
+      } catch (error) {
+        this.isListening = false;
+        reject(error);
+      }
+    });
+  }
+
+  stop() {
+    if (this.recognition && this.isListening) {
       this.recognition.stop();
+      this.isListening = false;
     }
   }
+
+  getIsListening(): boolean {
+    return this.isListening;
+  }
+}

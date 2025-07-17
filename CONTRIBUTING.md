@@ -5,6 +5,7 @@ Thank you for your interest in contributing to TigrayTutor! We welcome contribut
 ## 🌟 Ways to Contribute
 
 ### 🔧 Code Contributions
+
 - Bug fixes and improvements
 - New features and enhancements
 - Performance optimizations
@@ -12,18 +13,21 @@ Thank you for your interest in contributing to TigrayTutor! We welcome contribut
 - Documentation updates
 
 ### 🌍 Language & Content
+
 - Tigrinya language improvements
 - Educational content creation
 - Curriculum alignment suggestions
 - Cultural context enhancements
 
 ### 🧪 Testing & Feedback
+
 - Bug reporting
 - Feature testing
 - User experience feedback
 - Performance testing
 
 ### 📚 Documentation
+
 - Code documentation
 - User guides
 - API documentation
@@ -41,33 +45,39 @@ Thank you for your interest in contributing to TigrayTutor! We welcome contribut
 ### Development Setup
 
 1. **Fork the repository**
+
    ```bash
    # Click the "Fork" button on GitHub
    ```
 
 2. **Clone your fork**
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/tigray-tutor-ai.git
    cd tigray-tutor-ai
    ```
 
 3. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 4. **Set up environment variables**
+
    ```bash
    cp .env.example .env.local
    # Add your API keys (see README.md for details)
    ```
 
 5. **Create a feature branch**
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
 6. **Start development server**
+
    ```bash
    npm run dev
    ```

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from '@/lib/firebase';
+import { adminAuth } from '@/lib/firebase-admin';
 import { aiClient } from '@/lib/ai-client';
 import { dbService } from '@/lib/database';
 
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     }
     
     const token = authHeader.split('Bearer ')[1];
-    const decodedToken = await auth.verifyIdToken(token);
+    const decodedToken = await adminAuth.verifyIdToken(token);
     const userId = decodedToken.uid;
 
     const exercises = await aiClient.generateExercises(content, difficulty);

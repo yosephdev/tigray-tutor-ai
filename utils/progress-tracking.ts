@@ -1,22 +1,25 @@
-import { createClient } from '@supabase/supabase-js';
+import { Redis } from '@upstash/redis';
 import { AppError } from './error-handling';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+});
 
 export async function updateProgress(userId: string, lessonId: string, score: number) {
-    const { data, error } = await supabase
-      .from('progress')
-      .upsert({
+    const key = `progress:${userId}:${lessonId}`;
+    const value = {
         user_id: userId,
         lesson_id: lessonId,
         score,
         completed: score >= 70,
         last_accessed: new Date().toISOString()
-      });
-  
-    if (error) throw new AppError('Failed to update progress', 500);
-    return data;
-  }
+    };
+
+    try {
+        await redis.hset(key, value);
+        return value;
+    } catch (error) {
+        throw new AppError('Failed to update progress', 500);
+    }
+}

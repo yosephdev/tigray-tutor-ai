@@ -34,7 +34,7 @@ TigrayTutor is an AI-powered educational platform designed specifically for Tigr
 ### Technical Features
 
 - ⚡ **Built with Next.js 14** - Modern, fast, and scalable
-- 🔐 **Supabase authentication & database** - Secure user management
+- 🔐 **Firebase authentication & database** - Secure user management
 - 🧠 **Google Gemini AI integration** - Advanced AI capabilities
 - 📱 **Responsive design** - Works perfectly on all devices
 - 🌐 **Low-bandwidth optimized** - Accessible in areas with poor connectivity
@@ -60,7 +60,7 @@ TigrayTutor is an AI-powered educational platform designed specifically for Tigr
 ## 🛠️ Tech Stack
 
 - **Frontend**: Next.js 14, TypeScript
-- **Authentication & Database**: Supabase
+- **Authentication & Database**: Firebase Authentication, Firestore, Firebase Storage
 - **AI Integration**: Google Gemini API
 - **Styling**: Tailwind CSS, DaisyUI
 - **UI Components**: Radix UI
@@ -88,7 +88,7 @@ Currently using **Google Gemini Flash** model for AI responses.
 - Node.js 18+ installed
 - Google Gemini API key
 - Firebase project setup
-- Supabase account (optional)
+- Upstash Redis for caching
 
 ### Installation
 

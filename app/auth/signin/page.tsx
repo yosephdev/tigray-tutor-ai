@@ -1,8 +1,10 @@
 'use client';
-import { LoginForm } from '@/components/auth/LoginForm';
-import { Button } from '@/components/ui/button';
-import { BookOpen } from 'lucide-react';
+import React from 'react';
 import Link from 'next/link';
+import { BookOpen } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { LoginForm } from '@/components/auth/LoginForm';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 export default function SignInPage() {
   return (
@@ -10,12 +12,15 @@ export default function SignInPage() {
       <div className="w-full max-w-md px-4">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center space-x-2 mb-4">
-            <BookOpen className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-gray-800 dark:text-white">
-              TigrayTutor
-            </span>
-          </Link>
+          <div className="flex justify-between items-center mb-4">
+            <Link href="/" className="inline-flex items-center space-x-2">
+              <BookOpen className="h-8 w-8 text-primary" />
+              <span className="text-2xl font-bold text-gray-800 dark:text-white">
+                TigrayTutor
+              </span>
+            </Link>
+            <ThemeToggle />
+          </div>
         </div>
 
         <LoginForm />

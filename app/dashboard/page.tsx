@@ -1,11 +1,12 @@
 'use client';
-import React from "react";
-import { AuthGuard } from "@/components/auth/AuthGuard";
-import { TigrayTutorChat } from "@/components/TigrayTutorChat";
-import { useAuth } from "@/components/auth/AuthProvider";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { AuthGuard } from '@/components/auth/AuthGuard';
+import { useAuth } from '@/components/auth/AuthProvider';
+import { Button } from '@/components/ui/button';
+import { TigrayTutorChat } from '@/components/TigrayTutorChat';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
-export default function Dashboard() {
+export default function DashboardPage() {
   const { user, signOut } = useAuth();
 
   return (
@@ -22,6 +23,7 @@ export default function Dashboard() {
               </p>
             </div>
             <div className="flex items-center gap-4">
+              <ThemeToggle />
               <span className="text-sm text-gray-600 dark:text-gray-300">
                 Welcome, {user?.email}
               </span>

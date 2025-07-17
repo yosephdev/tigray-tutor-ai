@@ -1,10 +1,11 @@
 'use client';
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, Brain, Globe, Users, Zap, Shield } from 'lucide-react';
 import Link from 'next/link';
+import { BookOpen, Brain, Globe, Users, Zap, Shield } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useAuth } from '@/components/auth/AuthProvider';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 
 export function LandingPage() {
   const { user } = useAuth();
@@ -21,6 +22,7 @@ export function LandingPage() {
             </span>
           </div>
           <div className="flex items-center space-x-4">
+            <ThemeToggle />
             {user ? (
               <Link href="/dashboard">
                 <Button>Go to Dashboard</Button>

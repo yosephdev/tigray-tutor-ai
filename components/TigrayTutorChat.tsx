@@ -19,7 +19,7 @@ interface Message {
   imageUrl?: string;
 }
 
-export function Tigray TutorChat() {
+export function TigrayTutorChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',

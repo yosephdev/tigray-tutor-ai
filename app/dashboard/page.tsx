@@ -3,7 +3,7 @@ import React from 'react';
 import { AuthGuard } from '@/components/auth/AuthGuard';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { Button } from '@/components/ui/button';
-import { Tigray TutorChat } from '@/components/Tigray TutorChat';
+import { TigrayTutorChat } from '@/components/TigrayTutorChat';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 export default function DashboardPage() {
@@ -33,7 +33,7 @@ export default function DashboardPage() {
             </div>
           </header>
           
-          <Tigray TutorChat />
+          <TigrayTutorChat />
         </div>
       </div>
     </AuthGuard>

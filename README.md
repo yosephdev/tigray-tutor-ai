@@ -77,7 +77,7 @@ TigrayTutor is an AI-powered educational platform designed specifically for Tigr
 
 ## 💡 AI Model Information
 
-Currently using **Google Gemini Flash** model for AI responses. 
+Currently using **Google Gemini Flash** model for AI responses.
 
 > **Note**: If financial conditions allow, I plan to upgrade to unlimited Gemini Pro models for enhanced AI capabilities, faster responses, and better educational content generation. Your support and contributions can help make this possible!
 
@@ -93,23 +93,27 @@ Currently using **Google Gemini Flash** model for AI responses.
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/yosephdev/tigray-tutor-ai.git
    cd tigray-tutor-ai
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env.local
    # Add your API keys and configuration
    ```
 
 4. **Run the development server**
+
    ```bash
    npm run dev
    ```
@@ -127,7 +131,6 @@ Currently using **Google Gemini Flash** model for AI responses.
 - [ ] Mobile app for iOS and Android
 - [ ] Integration with Ethiopian Ministry of Education curriculum
 - [ ] Gamification features and achievement system
-- [ ] Multi-language support (Amharic, Oromo, etc.)
 
 ## 🤝 Contributing
 
@@ -147,7 +150,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Email**: [contact@yoseph.dev](mailto:contact@yoseph.dev)
 - **GitHub Issues**: [Report bugs or request features](https://github.com/yosephdev/tigray-tutor-ai/issues)
-- **Discussions**: [Join community discussions](https://github.com/yosephdev/tigray-tutor-ai/discussions)
 
 ## 🙏 Acknowledgments
 

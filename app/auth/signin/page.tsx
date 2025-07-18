@@ -16,7 +16,7 @@ export default function SignInPage() {
             <Link href="/" className="inline-flex items-center space-x-2">
               <BookOpen className="h-8 w-8 text-primary" />
               <span className="text-2xl font-bold text-gray-800 dark:text-white">
-                TigrayTutor
+                Tigray Tutor
               </span>
             </Link>
             <ThemeToggle />

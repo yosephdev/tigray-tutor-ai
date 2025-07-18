@@ -1,7 +1,7 @@
-# TigrayTutor - ትግራይ ተማሃራይ
+# Tigray Tutor - ትግራይ ተማሃራይ
 
 <div align="center">
-  <img src="public/preview.png" alt="TigrayTutor Preview" width="800"/>
+  <img src="public/preview.png" alt="Tigray Tutor Preview" width="800"/>
   
   [![Live Demo](https://img.shields.io/badge/🚀-Live%20Demo-blue?style=for-the-badge)](https://tigray-tutor-ai.vercel.app)
   [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github)](https://github.com/yosephdev/tigray-tutor-ai)
@@ -10,11 +10,11 @@
 
 ---
 
-TigrayTutor is an AI-powered educational platform designed specifically for Tigrinya-speaking students, providing personalized tutoring aligned with the Ethiopian curriculum.
+Tigray Tutor is an AI-powered educational platform designed specifically for Tigrinya-speaking students, providing personalized tutoring aligned with the Ethiopian curriculum.
 
 ## 🌐 Live Demo
 
-**🔗 [Try TigrayTutor Live](https://tigray-tutor-ai.vercel.app)**
+**🔗 [Try Tigray Tutor Live](https://tigray-tutor-ai.vercel.app)**
 
 *Experience the power of AI-driven education in Tigrinya language!*
 

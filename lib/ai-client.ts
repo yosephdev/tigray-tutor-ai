@@ -89,7 +89,7 @@ class AIClient {
       console.log('🤖 Generating response for:', prompt.substring(0, 50) + '...');
       
       // Shorter prompt to reduce token usage
-      const enhancedPrompt = `You are TigrayTutor for Tigrinya students in Ethiopia.
+      const enhancedPrompt = `You are Tigray Tutor for Tigrinya students in Ethiopia.
 
 Respond in both Tigrinya and English. Be educational, supportive, and culturally sensitive.
 
@@ -133,7 +133,7 @@ Response:`;
 
     try {
       const enhancedPrompt = `
-You are TigrayTutor analyzing an image for a Tigrinya-speaking student.
+You are Tigray Tutor analyzing an image for a Tigrinya-speaking student.
 
 Analyze this image and provide educational insights in both Tigrinya and English.
 Focus on educational value and cultural context when relevant.

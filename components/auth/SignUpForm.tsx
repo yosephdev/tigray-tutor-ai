@@ -41,7 +41,7 @@ export function SignUpForm() {
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
         <CardTitle>Create Account</CardTitle>
-        <CardDescription>Join TigrayTutor to start learning</CardDescription>
+        <CardDescription>Join Tigray Tutor to start learning</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">

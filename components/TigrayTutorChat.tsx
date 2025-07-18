@@ -19,11 +19,11 @@ interface Message {
   imageUrl?: string;
 }
 
-export function TigrayTutorChat() {
+export function Tigray TutorChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: 'ሰላም! Welcome to TigrayTutor! 🎓\n\n⚠️ **Free Tier Notice**: This uses free AI services with daily limits. Please use thoughtfully.\n\nI can help you with:\n• 💬 Chat in Tigrinya and English\n• 🎤 Voice input\n• 🖼️ Image analysis\n• 📚 Educational questions\n\nHow can I assist you today?',
+      content: 'ሰላም! Welcome to Tigray Tutor! 🎓\n\n⚠️ **Free Tier Notice**: This uses free AI services with daily limits. Please use thoughtfully.\n\nI can help you with:\n• 💬 Chat in Tigrinya and English\n• 🎤 Voice input\n• 🖼️ Image analysis\n• 📚 Educational questions\n\nHow can I assist you today?',
       isUser: false,
       timestamp: new Date(),
       type: 'text'
@@ -191,7 +191,7 @@ export function TigrayTutorChat() {
   return (
     <Card className="flex flex-col h-[600px] max-w-4xl mx-auto">
       <div className="p-4 border-b bg-muted/50">
-        <h3 className="font-semibold text-lg">🤖 TigrayTutor AI Chat</h3>
+        <h3 className="font-semibold text-lg">🤖 Tigray Tutor AI Chat</h3>
         <p className="text-sm text-muted-foreground">
           💬 Chat • 🎤 Voice • 🖼️ Images • Available in Tigrinya & English
         </p>

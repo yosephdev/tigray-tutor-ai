@@ -1,6 +1,6 @@
-# Contributing to TigrayTutor
+# Contributing to Tigray Tutor
 
-Thank you for your interest in contributing to TigrayTutor! We welcome contributions from developers, educators, linguists, and community members who want to help improve education for Tigrinya-speaking students.
+Thank you for your interest in contributing to Tigray Tutor! We welcome contributions from developers, educators, linguists, and community members who want to help improve education for Tigrinya-speaking students.
 
 ## 🌟 Ways to Contribute
 
@@ -310,7 +310,7 @@ Before submitting a PR, ensure:
 
 ### Our Pledge
 
-We pledge to make participation in TigrayTutor a harassment-free experience for everyone, regardless of:
+We pledge to make participation in Tigray Tutor a harassment-free experience for everyone, regardless of:
 
 - Age, body size, disability, ethnicity
 - Gender identity and expression

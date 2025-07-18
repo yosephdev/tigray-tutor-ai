@@ -18,7 +18,7 @@ export function LandingPage() {
           <div className="flex items-center space-x-2">
             <BookOpen className="h-8 w-8 text-primary" />
             <span className="text-2xl font-bold text-gray-800 dark:text-white">
-              TigrayTutor
+              Tigray Tutor
             </span>
           </div>
           <div className="flex items-center space-x-4">
@@ -47,7 +47,7 @@ export function LandingPage() {
           ትግራይ ተማሃራይ
         </h1>
         <h2 className="text-3xl md:text-4xl font-semibold text-gray-700 dark:text-gray-200 mb-8">
-          TigrayTutor
+          Tigray Tutor
         </h2>
         <p className="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto">
           AI-powered educational platform designed specifically for Tigrinya-speaking students, 
@@ -80,7 +80,7 @@ export function LandingPage() {
       {/* Features Section */}
       <section className="container mx-auto px-4 py-20">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-white mb-16">
-          Why Choose TigrayTutor?
+          Why Choose Tigray Tutor?
         </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <Card className="card-hover">
@@ -183,7 +183,7 @@ export function LandingPage() {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <BookOpen className="h-6 w-6" />
-                <span className="text-xl font-bold">TigrayTutor</span>
+                <span className="text-xl font-bold">Tigray Tutor</span>
               </div>
               <p className="text-gray-300">
                 AI-powered learning for Tigrinya students, built with ❤️ for the Tigray educational community.
@@ -223,7 +223,7 @@ export function LandingPage() {
           </div>
           
           <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-            <p>&copy; 2025 TigrayTutor. Built for the Tigray educational community.</p>
+            <p>&copy; 2025 Tigray Tutor. Built for the Tigray educational community.</p>
             <p className="mt-2">Contact: <a href="mailto:contact@yoseph.dev" className="text-primary hover:underline">contact@yoseph.dev</a></p>
           </div>
         </div>

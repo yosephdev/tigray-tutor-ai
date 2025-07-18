@@ -1,5 +1,5 @@
 export class OfflineStorage {
-  private dbName = 'TigrayTutorDB';
+  private dbName = 'Tigray TutorDB';
   private version = 1;
 
   async cacheLessons(lessons: any[]) {

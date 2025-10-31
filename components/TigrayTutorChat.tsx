@@ -4,31 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
-import { Mic, Send, Upload, AlertCircle, MicOff, Image } from 'lucide-react';
+import { Mic, Send, Upload, MicOff } from 'lucide-react';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { toast } from 'react-hot-toast';
 import { VoiceInput } from '@/utils/voice-input';
-
-interface Message {
-  id: string;
-  content: string;
-  isUser: boolean;
-  timestamp: Date;
-  error?: boolean;
-  type?: 'text' | 'image';
-  imageUrl?: string;
-}
+import { Message } from '@/lib/firebase';
 
 export function TigrayTutorChat() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      content: 'ሰላም! Welcome to Tigray Tutor! 🎓\n\n⚠️ **Free Tier Notice**: This uses free AI services with daily limits. Please use thoughtfully.\n\nI can help you with:\n• 💬 Chat in Tigrinya and English\n• 🎤 Voice input\n• 🖼️ Image analysis\n• 📚 Educational questions\n\nHow can I assist you today?',
-      isUser: false,
-      timestamp: new Date(),
-      type: 'text'
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
@@ -44,11 +27,48 @@ export function TigrayTutorChat() {
     }
   }, []);
 
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchMessages = async () => {
+      try {
+        const token = await user.getIdToken();
+        const response = await fetch('/api/exercises', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch messages');
+        }
+
+        const data = await response.json();
+        if (data.length === 0) {
+          const welcomeMessage: Message = {
+            id: '1',
+            content: 'ሰላም! Welcome to Tigray Tutor! 🎓\n\n⚠️ **Free Tier Notice**: This uses free AI services with daily limits. Please use thoughtfully.\n\nI can help you with:\n• 💬 Chat in Tigrinya and English\n• 🎤 Voice input\n• 🖼️ Image analysis\n• 📚 Educational questions\n\nHow can I assist you today?',
+            isUser: false,
+            timestamp: new Date().getTime(),
+            type: 'text'
+          };
+          setMessages([welcomeMessage]);
+        } else {
+          setMessages(data);
+        }
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+        toast.error('Could not load chat history.');
+      }
+    };
+
+    fetchMessages();
+  }, [user]);
+
   const sendMessage = async (messageText?: string, imageData?: string) => {
     const textToSend = messageText || input.trim();
     if ((!textToSend && !imageData) || !user) return;
 
-    // Simple rate limiting - 3 seconds between requests
     const now = Date.now();
     if (now - lastRequestTime < 3000) {
       toast.error('Please wait a moment before sending another message');
@@ -56,16 +76,16 @@ export function TigrayTutorChat() {
     }
     setLastRequestTime(now);
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
+    const userMessage: Omit<Message, 'id'> = {
       content: textToSend || 'Image uploaded',
       isUser: true,
-      timestamp: new Date(),
+      timestamp: new Date().getTime(),
       type: imageData ? 'image' : 'text',
       imageUrl: imageData
     };
+    
+    setMessages(prev => [...prev, { ...userMessage, id: Date.now().toString() }]);
 
-    setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
 
@@ -81,7 +101,7 @@ export function TigrayTutorChat() {
         requestBody.imageData = imageData;
       }
       
-      const response = await fetch('/api', {
+      const response = await fetch('/api/exercises', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,18 +112,19 @@ export function TigrayTutorChat() {
 
       const data = await response.json();
       
-      if (response.ok) {
-        const aiMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          content: data.response,
-          isUser: false,
-          timestamp: new Date(),
-          type: 'text'
-        };
-        setMessages(prev => [...prev, aiMessage]);
-      } else {
+      if (!response.ok) {
         throw new Error(data.error || `Server error: ${response.status}`);
       }
+      
+      const aiMessage: Message = {
+        id: Date.now().toString() + '-ai',
+        content: data.response,
+        isUser: false,
+        timestamp: new Date().getTime(),
+        type: 'text',
+      };
+      setMessages(prev => [...prev, aiMessage]);
+
     } catch (error: any) {
       console.error('Chat Error:', error);
       
@@ -118,10 +139,10 @@ export function TigrayTutorChat() {
       }
       
       const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
+        id: Date.now().toString() + '-error',
         content: errorContent,
         isUser: false,
-        timestamp: new Date(),
+        timestamp: new Date().getTime(),
         error: true,
         type: 'text'
       };
@@ -141,7 +162,7 @@ export function TigrayTutorChat() {
 
     if (isListening) {
       voiceInput.current.stop();
-      setIsListening(false);
+      setIsLoading(false);
       return;
     }
 
@@ -171,7 +192,7 @@ export function TigrayTutorChat() {
     const reader = new FileReader();
     reader.onload = (e) => {
       const base64 = e.target?.result as string;
-      const base64Data = base64.split(',')[1]; // Remove data:image/jpeg;base64, prefix
+      const base64Data = base64.split(',')[1]; 
       sendMessage('Please analyze this image', base64Data);
     };
     reader.readAsDataURL(file);
@@ -231,7 +252,7 @@ export function TigrayTutorChat() {
                 )}
                 <p className="whitespace-pre-wrap">{message.content}</p>
                 <span className="text-xs opacity-70 mt-1 block">
-                  {message.timestamp.toLocaleTimeString()}
+                  {new Date(message.timestamp).toLocaleTimeString()}
                 </span>
               </div>
             </div>

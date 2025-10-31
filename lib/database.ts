@@ -1,28 +1,30 @@
 import { db } from './firebase';
-import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
+import { ref, set, get, child } from 'firebase/database';
 
 class DatabaseService {
   async saveUserProgress(userId: string, lessonId: string, progress: number) {
+    if (!db) return;
     try {
-      const progressRef = doc(db, 'progress', `${userId}_${lessonId}`);
-      await setDoc(progressRef, {
+      const progressRef = ref(db, `progress/${userId}_${lessonId}`);
+      await set(progressRef, {
         userId,
         lessonId,
         progress,
-        updatedAt: new Date(),
-      }, { merge: true });
+        updatedAt: new Date().toISOString(),
+      });
     } catch (error) {
       console.error('Error saving progress:', error);
     }
   }
 
   async getUserProgress(userId: string, lessonId: string) {
+    if (!db) return null;
     try {
-      const progressRef = doc(db, 'progress', `${userId}_${lessonId}`);
-      const progressSnap = await getDoc(progressRef);
+      const dbRef = ref(db);
+      const progressSnap = await get(child(dbRef, `progress/${userId}_${lessonId}`));
       
       if (progressSnap.exists()) {
-        return progressSnap.data();
+        return progressSnap.val();
       }
       return null;
     } catch (error) {
@@ -32,12 +34,13 @@ class DatabaseService {
   }
 
   async saveUserProfile(userId: string, profile: any) {
+    if (!db) return;
     try {
-      const userRef = doc(db, 'users', userId);
-      await setDoc(userRef, {
+      const userRef = ref(db, `users/${userId}`);
+      await set(userRef, {
         ...profile,
-        updatedAt: new Date(),
-      }, { merge: true });
+        updatedAt: new Date().toISOString(),
+      });
     } catch (error) {
       console.error('Error saving profile:', error);
     }

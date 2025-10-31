@@ -90,3 +90,9 @@ public/worker-*.js.map
 .env.local
 
 firestore.rules
+
+storage.rules
+
+.idx/
+
+.firebase/

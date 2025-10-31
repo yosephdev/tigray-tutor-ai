@@ -3,5 +3,10 @@ import React from "react";
 import { LandingPage } from "../components/LandingPage";
 
 export default function Home() {
-  return <LandingPage />;
+  return (
+    <>
+      <h1>This is a test to force a new deployment</h1>
+      <LandingPage />
+    </>
+  );
 }
